@@ -16,8 +16,11 @@ import java.util.List;
 @Component
 public class MyUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private MemberDao memberDao;
+    private final MemberDao memberDao;
+
+    public MyUserDetailsService(MemberDao memberDao) {
+        this.memberDao = memberDao;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
