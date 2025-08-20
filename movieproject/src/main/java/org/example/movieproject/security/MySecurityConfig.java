@@ -31,6 +31,8 @@ public class MySecurityConfig {
                 .authorizeHttpRequests(request -> request
                         // 註冊帳號功能
                         .requestMatchers("/register").permitAll()
+                        // 登入功能
+                        .requestMatchers("/userLogin").authenticated()
                         .anyRequest().authenticated()
                 )
 

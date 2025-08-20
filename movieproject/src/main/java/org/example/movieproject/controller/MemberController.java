@@ -3,10 +3,14 @@ package org.example.movieproject.controller;
 import org.example.movieproject.dao.MemberDao;
 import org.example.movieproject.model.Member;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collection;
 
 @RestController
 public class MemberController {
@@ -29,6 +33,20 @@ public class MemberController {
         Integer memberId = memberDao.createMember(member);
 
         return "註冊成功";
+    }
+
+    // /login is used by Spring Security!
+    @PostMapping("/userLogin")
+    public String userLogin(Authentication authentication) {
+        // 帳號密碼驗證由 Spring Security 處理，能執行到這裡表示已經登入成功
+
+        // 取得使用者的帳號
+        String username = authentication.getName();
+
+        // 取得使用者的權限
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+        return "登入成功！帳號 " + username + " 的權限為: " + authorities;
     }
 
 }
