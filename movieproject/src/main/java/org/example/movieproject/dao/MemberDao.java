@@ -6,4 +6,6 @@ public interface MemberDao {
 
     Member getMemberByEmail(String email);
 
+    Integer createMember(Member member);
+
 }

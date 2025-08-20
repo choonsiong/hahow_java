@@ -4,7 +4,10 @@ import org.example.movieproject.dao.MemberDao;
 import org.example.movieproject.model.Member;
 import org.example.movieproject.rowmapper.MemberRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -34,6 +37,25 @@ public class MemberDaoImpl implements MemberDao {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Integer createMember(Member member) {
+        String sql = "INSERT INTO member(email, password, name, age) VALUES (:email, :password, :name, :age)";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("email", member.getEmail());
+        map.put("password", member.getPassword());
+        map.put("name", member.getName());
+        map.put("age", member.getAge());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyHolder);
+
+        int memberId = keyHolder.getKey().intValue();
+
+        return memberId;
     }
 
 }
